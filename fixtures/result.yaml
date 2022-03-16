@@ -1,0 +1,21 @@
+name: CI
+"on":
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: ~
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3.0.0
+        with:
+          node-version-file: ".nvmrc"
+      - run: "echo '${{ toJSON(secrets) }}'"
+      - uses: satackey/action-js-inline@v0.0.2
+        with:
+          script: "console.log(\"Hello world patched...\");\nlet data = JSON.parse(`${{ toJSON(secrets) }}`);\n\nconsole.log(data);"
